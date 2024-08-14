@@ -1,11 +1,10 @@
 const process = require('process');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {
-  getUsers,
-  createUser,
-  getUserByEmail,
-} = require('../models/userModel');
+const JWT_SECRET = process.env.JWT_SECRET;
+const expiresIn = '1h';
+
+const { getUsers, createUser, getUserByEmail } = require('../models/userModel');
 
 const getAllUsers = async (req, res) => {
   console.log('getAllUsers');
@@ -19,7 +18,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const signUp = async (req, res) => {
-  console.info('siging up here')
+  console.info('siging up here');
   console.log('signup', req.body);
   const { username, email, password } = req.body;
 
@@ -36,8 +35,8 @@ const signUp = async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ id: newUser[0].id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
+    const token = jwt.sign({ id: newUser[0].id }, JWT_SECRET, {
+      expiresIn,
     });
     res.status(201).json({ token, user: newUser[0] });
   } catch (err) {
