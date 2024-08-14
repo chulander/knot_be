@@ -6,7 +6,9 @@ const {
   getContactHistory,
 } = require('../models/contactModel');
 
+const DELAY_DURATION = process.env.DELAY_DURATION || 20000;
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
 const getAllContacts = async (req, res) => {
   const { user_id } = req.params;
@@ -24,7 +26,7 @@ const addContact = async (req, res) => {
   const contactData = { ...req.body, user_id };
   try {
     // Simulate slow endpoint by waiting for 20 seconds
-    await delay(1000);
+    await delay(DELAY_DURATION);
     const newContact = await createContact(contactData);
     const io = req.app.get('socketio');
     io.emit('contact_created', newContact);
