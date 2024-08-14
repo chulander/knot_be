@@ -2,6 +2,7 @@ exports.up = function (knex) {
   return knex.schema.createTable('audit', (table) => {
     table.increments('id').primary(); // Auto-incrementing ID
     table.string('table_name').notNullable(); // Name of the table being audited
+    table.integer('record_id').notNullable(); // ID of the record being audited (e.g., contact_id, user_id)
     table.string('field').notNullable(); // The specific field that was changed
     table.text('old_value').nullable(); // The previous value of the field
     table.text('new_value').nullable(); // The new value of the field

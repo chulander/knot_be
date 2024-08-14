@@ -47,7 +47,6 @@ const addContact = async (req, res) => {
 const modifyContact = async (req, res) => {
   const { id, user_id } = req.params;
   try {
-    console.log('req.body:', req.body);
     const { first_name, last_name, email, phone_number } = req.body;
     const updatedContact = await updateContact(id, user_id, {
       first_name,

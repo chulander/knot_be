@@ -7,6 +7,7 @@ const createContact = async (contact) => {
     // Prepare audit entries for each field in the contact
     const auditEntries = Object.keys(contact).map((field) => ({
       table_name: 'contacts',
+      record_id: newContact.id, // Record the contact's ID
       field,
       old_value: null,
       new_value: newContact[field],
@@ -53,6 +54,7 @@ const updateContact = async (id, userId, updates) => {
       if (updates[field] && updates[field] !== previousContact[field]) {
         changedFields.push({
           table_name: 'contacts',
+          record_id: id, // Record the contact's ID
           field,
           old_value: previousContact[field],
           new_value: updates[field],
@@ -90,6 +92,7 @@ const deleteContact = async (id, userId) => {
     // Prepare audit entries for each field in the contact
     const auditEntries = Object.keys(contact).map((field) => ({
       table_name: 'contacts',
+      record_id: id, // Record the contact's ID
       field,
       old_value: contact[field],
       new_value: null, // Deletion, so new value is null
@@ -115,9 +118,12 @@ const getContacts = (userId) => {
 };
 
 // Fetch history for a specific contact
-const getContactHistory = (contactId) => {
-  return knex('contact_history')
-    .where({ contact_id: contactId })
+const getContactHistory = async (contactId) => {
+  return knex('audit')
+    .where({
+      table_name: 'contacts', // Filter by the specific table being audited
+      record_id: contactId, // Filter by the specific record ID (e.g., contact_id)
+    })
     .orderBy('changed_at', 'desc');
 };
 

@@ -18,8 +18,6 @@ const getAllUsers = async (req, res) => {
 };
 
 const signUp = async (req, res) => {
-  console.info('siging up here');
-  console.log('signup', req.body);
   const { username, email, password } = req.body;
 
   try {
