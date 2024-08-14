@@ -6,12 +6,15 @@ const {
   getContactHistory,
 } = require('../models/contactModel');
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const getAllContacts = async (req, res) => {
   const { user_id } = req.params;
   try {
     const contacts = await getContacts(user_id);
     res.status(200).json(contacts);
   } catch (err) {
+    console.error('Error retrieving contacts:', err);
     res.status(500).json({ message: 'Error retrieving contacts' });
   }
 };
@@ -19,27 +22,42 @@ const getAllContacts = async (req, res) => {
 const addContact = async (req, res) => {
   const { user_id } = req.params;
   const contactData = { ...req.body, user_id };
-
   try {
-    setTimeout(async () => {
-      const newContact = await createContact(contactData);
-      const io = req.app.get('socketio');
-      io.emit('contact_created', newContact);
-      res.status(201).json(newContact);
-    }, 20000); // Simulate slow endpoint
+    // Simulate slow endpoint by waiting for 20 seconds
+    await delay(1000);
+    const newContact = await createContact(contactData);
+    const io = req.app.get('socketio');
+    io.emit('contact_created', newContact);
+    res.status(201).json(newContact);
   } catch (err) {
-    res.status(500).json({ message: 'Error creating contact' });
+    console.error('bryan error', err);
+    if (err.code === '23505') {
+      // Check for the unique constraint violation error code
+      console.error('Unique constraint violation:', err.detail);
+      res.status(400).json({ message: `${req.body.email} already exists` });
+    } else {
+      console.error('Error creating contact:', err);
+      res.status(500).json({ message: 'Error creating contact' });
+    }
   }
 };
 
 const modifyContact = async (req, res) => {
   const { id, user_id } = req.params;
   try {
-    const updatedContact = await updateContact(id, req.body, user_id);
+    console.log('req.body:', req.body);
+    const { first_name, last_name, email, phone_number } = req.body;
+    const updatedContact = await updateContact(id, user_id, {
+      first_name,
+      last_name,
+      email,
+      phone_number,
+    });
     const io = req.app.get('socketio');
     io.emit('contact_updated', updatedContact);
     res.status(200).json(updatedContact);
   } catch (err) {
+    console.error('Error updating contact:', err);
     res.status(500).json({ message: 'Error updating contact' });
   }
 };
@@ -55,6 +73,7 @@ const removeContact = async (req, res) => {
     io.emit('contact_deleted', deletedContact);
     res.status(200).json({ message: 'Contact deleted' });
   } catch (err) {
+    console.error('Error deleting contact:', err);
     res.status(500).json({ message: 'Error deleting contact' });
   }
 };
@@ -65,6 +84,7 @@ const fetchContactHistory = async (req, res) => {
     const history = await getContactHistory(id, user_id);
     res.status(200).json(history);
   } catch (err) {
+    console.error('Error retrieving contact history:', err);
     res.status(500).json({ message: 'Error retrieving contact history' });
   }
 };

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1723617352577" clover="3.2.0">
-  <project timestamp="1723617352577" name="All files">
-    <metrics statements="179" coveredstatements="147" conditionals="12" coveredconditionals="7" methods="27" coveredmethods="21" elements="218" coveredelements="175" complexity="0" loc="179" ncloc="179" packages="7" files="12" classes="12"/>
+<coverage generated="1723617987965" clover="3.2.0">
+  <project timestamp="1723617987965" name="All files">
+    <metrics statements="181" coveredstatements="149" conditionals="12" coveredconditionals="7" methods="27" coveredmethods="21" elements="220" coveredelements="177" complexity="0" loc="181" ncloc="181" packages="7" files="12" classes="12"/>
     <package name="backend">
       <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="knexfile.js" path="/Users/chulander/projects/job-challenges/knotapi/backend/knexfile.js">
@@ -163,14 +163,16 @@
       </file>
     </package>
     <package name="backend.src.db">
-      <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+      <metrics statements="7" coveredstatements="7" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
       <file name="knex.js" path="/Users/chulander/projects/job-challenges/knotapi/backend/src/db/knex.js">
-        <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="7" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="3" count="3" type="stmt"/>
         <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
         <line num="6" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
       </file>
     </package>
     <package name="backend.src.models">

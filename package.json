@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
+    "rollback": "knex migrate:rollback",
     "migrate": "knex migrate:latest",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
