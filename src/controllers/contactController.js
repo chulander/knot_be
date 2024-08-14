@@ -57,8 +57,14 @@ const modifyContact = async (req, res) => {
     io.emit('contact_updated', updatedContact);
     res.status(200).json(updatedContact);
   } catch (err) {
-    console.error('Error updating contact:', err);
-    res.status(500).json({ message: 'Error updating contact' });
+    if (err.code === '23505') {
+      // Check for the unique constraint violation error code
+      console.error('Unique constraint violation:', err.detail);
+      res.status(400).json({ message: `${req.body.email} already exists` });
+    } else {
+      console.error('Error creating contact:', err);
+      res.status(500).json({ message: 'Error creating contact' });
+    }
   }
 };
 
