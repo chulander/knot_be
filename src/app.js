@@ -4,12 +4,13 @@ const cookieParser = require('cookie-parser');
 const contactRoutes = require('./routes/contactRoutes');
 const userRoutes = require('./routes/userRoutes');
 const authenticateToken = require('./middleware/auth');
+const process = require('process');
 require('dotenv').config();
 
 const app = express();
 
 // Configure CORS to allow requests from the frontend
-const allowedOrigins = ['http://localhost:5173']; // Add your frontend origin here
+const allowedOrigins = [process.env.FRONTEND_ORIGIN || 'http://localhost:5173']; // Add your frontend origin here
 app.use(
   cors({
     origin: allowedOrigins,
