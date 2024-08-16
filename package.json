@@ -18,6 +18,7 @@
   "description": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "dotenv-safe": "^9.1.0",
@@ -34,17 +35,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.9.0",
-    "jest": "^29.7.0",
     "knex": "^3.1.0",
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
-    "sqlite3": "^5.1.7",
-    "supertest": "^7.0.0"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
+    "sqlite3": "^5.1.7"
   }
 }

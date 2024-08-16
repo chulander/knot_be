@@ -1,15 +1,28 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const contactRoutes = require('./routes/contactRoutes');
 const userRoutes = require('./routes/userRoutes');
+const authenticateToken = require('./middleware/auth');
 require('dotenv').config();
 
 const app = express();
 
-app.use(cors());
+// Configure CORS to allow requests from the frontend
+const allowedOrigins = ['http://localhost:5173']; // Add your frontend origin here
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true, // Allow credentials to be sent (cookies, authorization headers, etc.)
+  }),
+);
+
+// Middleware to parse JSON bodies and cookies
+app.use(cookieParser());
 app.use(express.json());
 
-app.use('/api/contacts', contactRoutes);
-app.use('/api/users', userRoutes);
+// Apply authentication middleware to all routes that require authentication
+app.use('/api/contacts', authenticateToken, contactRoutes);
+app.use('/api/users', userRoutes); // User routes don't need authentication initially
 
 module.exports = app;

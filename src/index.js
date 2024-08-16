@@ -3,10 +3,22 @@ const socketIo = require('socket.io');
 const app = require('./app'); // Import the app from app.js
 
 const server = http.createServer(app);
-const io = socketIo(server);
+const process = require('process');
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+
+const io = socketIo(server, {
+  cors: {
+    origin: FRONTEND_ORIGIN,
+    credentials: true,
+  },
+});
 
 io.on('connection', (socket) => {
   console.log('New client connected');
+
+  socket.on('join', (user_id) => {
+    socket.join(`user_${user_id}`);
+  });
 
   socket.on('disconnect', () => {
     console.log('Client disconnected');
