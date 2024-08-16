@@ -17,7 +17,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const signUp = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     const existingUser = await getUserByEmail(email);
@@ -27,7 +27,6 @@ const signUp = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await createUser({
-      username,
       email,
       password: hashedPassword,
     });
@@ -38,14 +37,18 @@ const signUp = async (req, res) => {
 
     // Send JWT as httpOnly cookie
     res.cookie('token', token, {
-      httpOnly: false, // Set to true in production, easier for testing in development if the cookie can be accessed by javascript
+      httpOnly: true, // do not let javascript code access cookies
       secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
       maxAge: 3600000, // 1 hour
     });
 
-    res
-      .status(201)
-      .json({ message: 'User created successfully', user: newUser[0] });
+    res.status(201).json({
+      message: 'User created successfully',
+      user: {
+        id: newUser[0].id,
+        email: newUser[0].email,
+      },
+    });
   } catch (err) {
     console.error('Error creating user:', err);
     res.status(500).json({ message: 'Error creating user' });
@@ -54,8 +57,6 @@ const signUp = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log('email:', email);
-  console.log('password:', password);
 
   try {
     const user = await getUserByEmail(email);
@@ -76,7 +77,7 @@ const login = async (req, res) => {
 
     // Send JWT as httpOnly cookie
     res.cookie('token', token, {
-      httpOnly: true,
+      httpOnly: true, // do not let javascript code access cookies
       secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
       maxAge: 3600000, // 1 hour
     });
@@ -85,7 +86,6 @@ const login = async (req, res) => {
       message: 'Login successful',
       user: {
         id: user.id,
-        username: user.username,
         email: user.email,
       },
     });

@@ -12,7 +12,6 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const getAllContacts = async (req, res) => {
   const user_id = req.user.id; // Get user_id from JWT token
-  console.log('user_id:', user_id);
   try {
     const contacts = await getContacts(user_id);
     res.status(200).json(contacts);
@@ -33,7 +32,6 @@ const addContact = async (req, res) => {
     io.to(`user_${user_id}`).emit('contact_created', newContact); // Broadcast to the user's room
     res.status(201).json(newContact);
   } catch (err) {
-    console.error('bryan error', err);
     if (err.code === '23505') {
       console.error('Unique constraint violation:', err.detail);
       res.status(400).json({ message: `${req.body.email} already exists` });

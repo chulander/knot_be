@@ -1,7 +1,7 @@
 const knex = require('../db/knex');
 
 const getUsers = () => {
-  return knex('users').select('id', 'username', 'email'); // Should reference 'users'
+  return knex('users').select('id', 'email'); // Should reference 'users'
 };
 
 const createUser = (user) => {
